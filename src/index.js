@@ -5,6 +5,7 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import { createStore } from 'redux';
 import reducer from './reducers';
+import { Provider } from 'react-redux';
 
 
 
@@ -18,7 +19,9 @@ const store = createStore(
 
 // 将store 传递给应用组件，现在应用将接收 store 作为 props
 ReactDOM.render(
-    <App store={store} />,
+    <Provider store={store}>
+        <App />
+    </Provider>,
     document.getElementById('root')
 );
 

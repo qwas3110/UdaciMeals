@@ -41,6 +41,10 @@ const initialCalendarState = {
     },
 };
 
+
+
+// [ ] （用于引用对象属性名称）
+
 function calendar(state = initialCalendarState, action) {
     const { day, recipe, meal } = action;
 
