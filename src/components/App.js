@@ -1,9 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { addRecipe,removeFromCalendar } from '../actions';
 
 
 
 class App extends React.Component{
+
+    doThing = () => {
+        this.props.selectRecipe({})
+    };
 
 
     render() {
@@ -21,7 +26,7 @@ class App extends React.Component{
 
 // 此函数将我们Redux 状态映射到组件props
 
-function mapStateToProps(calendar) {
+function mapStateToProps (calendar) {
     // 创建星期数组
     const dayOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     // 返回一个具有calendar属性的对象
@@ -39,8 +44,19 @@ function mapStateToProps(calendar) {
 }
 
 
+//
 
-export default connect(mapStateToProps)(App);
+function mapDispatchToProps (dispatch) {
+    return {
+        selectRecipe: (data) => dispatch(addRecipe(data)),
+        remove: (data) => dispatch(removeFromCalendar(data))
+    }
+}
+
+
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);
 
 
 
