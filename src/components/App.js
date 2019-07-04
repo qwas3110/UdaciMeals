@@ -26,7 +26,7 @@ class App extends React.Component{
 
 // 此函数将我们Redux 状态映射到组件props
 
-function mapStateToProps (calendar) {
+function mapStateToProps ({ food,calendar }) {
     // 创建星期数组
     const dayOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     // 返回一个具有calendar属性的对象
@@ -35,7 +35,7 @@ function mapStateToProps (calendar) {
             day,
             meals: Object.keys(calendar[day]).reduce((meals,meal) => {
                 meals[meal] = calendar[day][meal]
-                    ? calendar[day][meal]
+                    ? food[calendar[day][meal]]
                     : null;
                 return meals;
             },{})

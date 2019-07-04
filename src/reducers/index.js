@@ -1,7 +1,9 @@
+import { combineReducers } from 'redux';
 import {
     ADD_RECIPE,
     REMOVE_FROM_CALENDAR,
 } from '../actions';
+
 
 // 创建food reducer
 
@@ -92,4 +94,7 @@ function calendar(state = initialCalendarState, action) {
     }
 }
 
-export default calendar;
+export default combineReducers({
+    food,
+    calendar,
+});
