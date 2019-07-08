@@ -13,6 +13,9 @@ import Loading from 'react-loading';
 import { fetchRecipes } from '../utils/api';
 
 import FoodList from './FoodList'
+//导入食物制作清单
+import ShoppingList from './ShoppingList';
+
 
 //openFoodModal 打开模态框
 // 将在本地组件上设置状态，foodModalOpen变为true，然后传入meal和day
@@ -35,6 +38,7 @@ class App extends React.Component {
         day: null,
         food:null,
         loadingFood: false,
+        ingredientsModalOpen: false,
     };
 
     openFoodModal = ({ meal, day }) => {
@@ -73,6 +77,28 @@ class App extends React.Component {
 
     };
 
+    //食物制作清单方法
+    //openIngredientsModal 开启
+    //closeIngredientsModal 关闭
+    // generateShoppingList 生成清单
+    openIngredientsModal = () => this.setState(() => ({ ingredientsModalOpen: true }))
+    closeIngredientsModal = () => this.setState(() => ({ ingredientsModalOpen: false }))
+    generateShoppingList = () => {
+        //对calendar 使用Reduce方法，将获得所有餐饭并全部推入一个数组中
+        // 将此数组展开
+        return this.props.calendar.reduce((result, { meals }) => {
+            const { breakfast, lunch, dinner } = meals
+
+            breakfast && result.push(breakfast)
+            lunch && result.push(lunch)
+            dinner && result.push(dinner)
+
+            return result
+        }, [])
+            .reduce((ings, { ingredientLines }) => ings.concat(ingredientLines), [])
+            //结束后，当我们调用 generateShopingList我们将获得是包含这些餐饮所有不用食材的一个数组
+    }
+
 
 
 
@@ -80,13 +106,24 @@ class App extends React.Component {
     render() {
 
 
-        const { foodModalOpen, loadingFood, food  } = this.state;
+        const { foodModalOpen, loadingFood, food,ingredientsModalOpen  } = this.state;
         const { calendar, remove, selectRecipe } = this.props;
         const mealOrder = ['breakfast', 'lunch', 'dinner'];
 
 
         return (
             <div className='container'>
+
+                {/*添加一个导航栏*/}
+                <div className='nav'>
+                    <h1 className='header'>UdaciMeals</h1>
+                    <button
+                        className='shopping-list'
+                        onClick={this.openIngredientsModal}
+                        >
+                        Shopping List
+                    </button>
+                </div>
 
                 <ul className='meal-types'>
                     {mealOrder.map((mealType) => (
@@ -168,7 +205,17 @@ class App extends React.Component {
                             </div>}
                     </div>
                 </Modal>
-
+                {/*ingredientsModalOpen为true的时候打开*/}
+                {/*onRequestClose通过请求来关闭它*/}
+                <Modal
+                    className='modal'
+                    overlayClassName='overlay'
+                    isOpen={ingredientsModalOpen}
+                    onRequestClose={this.closeIngredientsModal}
+                    contentLabel='Modal'
+                >
+                    {ingredientsModalOpen && <ShoppingList list={this.generateShoppingList()}/>}
+                </Modal>
 
             </div>
         )
